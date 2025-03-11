@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calmora</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom right, #6a11cb, #2575fc);
+            color: #fff;
+            overflow: hidden;
+        }
+
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: cyan;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 9999;
+        }
+
+        #loading-bar-container {
+            position: relative;
+            width: 300px;
+            height: 50px;
+            background-color: #333;
+            border-radius: 30px;
+            overflow: hidden;
+            border: 2px solid #00ff00;
+            box-shadow: 0 0 10px #00ff00;
+        }
+
+        #loading-bar {
+            height: 100%;
+            width: 0%;
+            background-color: #00ff00;
+            border-radius: 30px;
+            transition: width 0.1s ease-out;
+        }
+
+        #loading-gif {
+            position: absolute;
+            height: 70px;
+            width: 70px;
+            top: -10px;
+            left: 0;
+            transition: left 0.9s ease-out;
+        }
+
+        .scroll-container {
+            height: 100vh;
+            overflow-y: auto;
+            padding: 20px 0;
+            scroll-behavior: smooth;
+            display: none;
+            background: url('rotation.gif') no-repeat center center fixed;
+            background-size: cover;
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .carousel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            background-color: transparent;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .carousel-slide {
+            width: 250px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(255, 255, 255, 0.8);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            padding: 10px;
+            overflow: hidden;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .carousel-slide p {
+            margin: 10px 0 0;
+            font-size: 30px;
+            font-weight: bold;
+            color: #aab2e6;
+            text-align: center;
+        }
+
+        .carousel-slide a {
+            display: block;
+            margin-top: 10px;
+            color: #3498db;
+            font-size: 14px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .carousel-slide a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>  
+    <audio id="bg-music" autoplay loop>
+        <source src="back-music.mp3" type="audio/mpeg">
+        <source src="background-music.ogg" type="audio/ogg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <div id="loading-screen">
+        <div id="loading-bar-container">
+            <div id="loading-bar"></div>
+            <img id="loading-gif" src="loading.gif" alt="Loading">
+        </div>
+    </div>
+
+    <div class="scroll-container">
+        <div class="carousel">
+            <div class="carousel-slide" data-id="1">
+                <img src="anger.gif" alt="Anger GIF">
+                <p>Anger</p>
+                <button>"https://giphy.com/gifs/inside-out-gif-Xtij9YYM3NLYk"</button>
+            </div>
+            <div class="carousel-slide" data-id="2">
+                <img src="sadness.gif" alt="Sadness GIF">
+                <p>Sadness</p>
+                <button>"https://giphy.com/gifs/disney-pixar-disney-inside-out-aTmRWaC5FXRaE"</button>
+            </div>
+            <div class="carousel-slide" data-id="3">
+                <img src="fear.gif" alt="Fear GIF">
+                <p>Fear</p>
+                <button>"https://gifer.com/en/XHoA"</button>
+            </div>
+            <div class="carousel-slide" data-id="4">
+                <img src="anxiety.gif" alt="Anxiety GIF">
+                <p>Anxiety</p>
+                <button>"https://tenor.com/view/anxi%C3%A9t%C3%A9-anxiety-vice-versa-inside-out-disney-gif-18293769329418033413"</button>
+            </div>
+            <div class="carousel-slide" data-id="5">
+                <img src="ennui.gif" alt="Ennui GIF">
+                <p>Ennui</p>
+                <button>"https://tenor.com/view/inside-out-2-ennui-freaking-out-looking-for-something-frantic-gif-9080528572232619191"</butto>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            let loadingBar = document.getElementById('loading-bar');
+            let loadingGif = document.getElementById('loading-gif');
+            let loadingScreen = document.getElementById('loading-screen');
+            let scrollContainer = document.querySelector('.scroll-container');
+            let audio = document.getElementById("bg-music");
+            
+            let progress = 0;
+            let interval = setInterval(() => {
+                progress += 5;
+                loadingBar.style.width = progress + "%";
+                loadingGif.style.left = (progress * 3) + "px";
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        loadingScreen.style.display = 'none';
+                        scrollContainer.style.display = 'block';
+                    }, 500);
+                }
+            }, 200);
+            
+            document.querySelectorAll('.carousel-slide').forEach(slide => {
+                slide.addEventListener('click', () => {
+                    let choiceText = slide.querySelector("p").textContent.trim();
+
+                    let pages = {
+                        "Anger": "anger-choices.html",
+                        "Sadness": "sadness-choices.html",
+                        "Fear": "fear-choices.html",
+                        "Anxiety": "anxiety-choices.html",
+                        "Ennui": "ennui-choices.html"
+                    };
+
+                    if (pages[choiceText]) {
+                        window.location.href = pages[choiceText];
+                    } else {
+                        alert("Page not found!");
+                    }
+                });
+            });
+
+            // Try to play music when user interacts with the page (for browsers blocking autoplay)
+            document.body.addEventListener("click", function() {
+                audio.muted = false;
+                audio.play();
+            }, { once: true });
+        };      
+    </script>
+</body>
+</html>
